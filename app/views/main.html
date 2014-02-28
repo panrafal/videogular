@@ -1,13 +1,15 @@
 <div class="container">
 	<div>
-		<videogular vg-width="config.width" vg-height="config.height" vg-theme="config.theme.url" vg-autoplay="config.autoPlay" vg-stretch="config.stretch.value" vg-responsive="config.responsive">
-			<video preload='metadata' loop>
-				<source src="http://www.videogular.com/assets/videos/videogular.mp4" type="video/mp4">
-				<source src="http://www.videogular.com/assets/videos/videogular.webm" type="video/webm">
+		<videogular
+			vg-player-ready="onPlayerReady" vg-complete="onCompleteVideo" vg-update-time="onUpdateTime" vg-update-size="onUpdateSize" vg-update-volume="onUpdateVolume" vg-update-state="onUpdateState"
+			vg-width="config.width" vg-height="config.height" vg-theme="config.theme.url" vg-autoplay="config.autoPlay" vg-stretch="config.stretch.value" vg-responsive="true">
+			<video preload='metadata'>
+				<source ng-repeat="source in config.sources" ng-src="{{source.src}}" type="{{source.type}}">
 
 				<track kind="captions" src="assets/subs/pale-blue-dot.vtt" srclang="en" label="English" default></track>
 			</video>
 
+			<vg-ima-ads vg-network="config.plugins.ads.network" vg-unit-path="config.plugins.ads.unitPath" vg-companion="config.plugins.ads.companion" vg-companion-size="config.plugins.ads.companionSize" vg-ad-tag-url="config.plugins.ads.adTagUrl"></vg-ima-ads>
 			<vg-poster-image vg-url='config.plugins.poster.url' vg-stretch="config.stretch.value"></vg-poster-image>
 			<vg-buffering></vg-buffering>
 			<vg-overlay-play vg-play-icon="config.theme.playIcon"></vg-overlay-play>
@@ -33,6 +35,8 @@
 			</vg-controls>
 		</videogular>
 	</div>
+
+	<div id="companionAd"></div>
 
 	<div class="row">
 		<div class="col-12"><h2>Properties</h2></div>
@@ -81,15 +85,25 @@
 	</div>
 
 	<div class="row">
-		<div class="col-12">
+		<div class="col-6 col-sm-4 col-lg-4">
 			<div>Theme: {{config.theme.url}}</div>
 			<div>Width: {{config.width}}</div>
 			<div>Height: {{config.height}}</div>
 			<div>Poster image: {{config.plugins.poster.url}}</div>
 			<div>Stretch: {{config.stretch}}</div>
 			<div>AutoPlay: {{config.autoPlay}}</div>
+		</div>
+		<div class="col-6 col-sm-4 col-lg-4">
 			<div>AutoHide: {{config.autoHide}}</div>
 			<div>Responsive: {{config.responsive}}</div>
+			<div>State: {{state}}</div>
+			<div>Time: {{currentTime}} / {{totalTime || 0}}</div>
+			<div>Volume: {{volume}}</div>
+			<div>Completed: {{isCompleted}}</div>
+		</div>
+		<div class="col-6 col-sm-4 col-lg-4">
+			<button ng-click="API.play()">Play</button>
+			<button ng-click="API.pause()">Pause</button>
 		</div>
 	</div>
 </div>
